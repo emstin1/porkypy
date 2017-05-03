@@ -23,13 +23,16 @@
 
 
 import requests
+import argparse
 from sys import argv, exit
-#TODO: use argparse for easier ooptions
 
-callsign = argv[1]
+parser = argparse.ArgumentParser()
+parser.add_argument("callsign", help='the callsign to search')
+args = parser.parse_args()
+
 url = "http://api.hamdb.org/{}/json/PorkPy"
 
-r = requests.get(url.format(callsign))
+r = requests.get(url.format(args.callsign))
 
 hamdb_response = r.json()['hamdb']
 
