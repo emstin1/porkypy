@@ -21,13 +21,18 @@
 
 
 
-
+#TODO: add support for exporting and importing data to/from csv
 import requests
 import argparse
 from sys import argv, exit
 
 parser = argparse.ArgumentParser()
 parser.add_argument("callsign", help='the callsign to search')
+parser.add_argument('--name', help='licensee name', action='store_true')
+parser.add_argument('--address', help='licensee address', action='store_true')
+parser.add_argument('--expiration', help='license expiration date', action='store_true')
+parser.add_argument('--status', help='license status', action='store_true')
+parser.add_argument('--class', help='license class', action='store_true')
 args = parser.parse_args()
 
 url = "http://api.hamdb.org/{}/json/PorkPy"
@@ -50,6 +55,8 @@ addr1 = callsign_info['addr1']
 city  = callsign_info['addr2']
 state  = callsign_info['state']
 zcode  = callsign_info['zip']
+status = callsign_info['status']
+expiration = callsign_info['expires']
 
 response = """
               CALLSIGN:    {0}
@@ -60,4 +67,18 @@ response = """
                            {5}
                            {6}, {7} {8}
 """
-print(response.format(call, full_name, grid, license_class, country,addr1, city, state, zcode))
+
+
+if args.address:
+   print( """
+            ADDRESS: {0}
+                     {1}
+                     {2}, {3} {4}
+    """.format(country, addr1, city, state, zcode))
+if args.name:
+    print("""
+            NAME: {}
+    """.format(full_name))
+else:
+    print(response.format(call, full_name, grid, license_class, country,addr1, city, state, zcode))
+
